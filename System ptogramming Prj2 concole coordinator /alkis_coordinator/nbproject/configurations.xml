@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurationDescriptor version="100">
+  <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
+    <logicalFolder name="HeaderFiles"
+                   displayName="Header Files"
+                   projectFiles="true">
+      <itemPath>Chain.h</itemPath>
+      <itemPath>Database.h</itemPath>
+      <itemPath>Job.h</itemPath>
+      <itemPath>Pool.h</itemPath>
+      <itemPath>PoolChain.h</itemPath>
+      <itemPath>PoolDatabase.h</itemPath>
+      <itemPath>PoolJob.h</itemPath>
+      <itemPath>PoolWorld.h</itemPath>
+      <itemPath>World.h</itemPath>
+      <itemPath>main_pool.h</itemPath>
+      <itemPath>pipesparams.h</itemPath>
+      <itemPath>readparams.h</itemPath>
+    </logicalFolder>
+    <logicalFolder name="SourceFiles"
+                   displayName="Source Files"
+                   projectFiles="true">
+      <itemPath>Chain.cpp</itemPath>
+      <itemPath>Database.cpp</itemPath>
+      <itemPath>Pool.cpp</itemPath>
+      <itemPath>PoolChain.cpp</itemPath>
+      <itemPath>PoolDatabase.cpp</itemPath>
+      <itemPath>PoolWorld.cpp</itemPath>
+      <itemPath>World.cpp</itemPath>
+      <itemPath>main_coordinator.cpp</itemPath>
+      <itemPath>main_pool.cpp</itemPath>
+      <itemPath>pipebuffer.cpp</itemPath>
+    </logicalFolder>
+    <logicalFolder name="TestFiles"
+                   displayName="Test Files"
+                   projectFiles="false"
+                   kind="TEST_LOGICAL_FOLDER">
+    </logicalFolder>
+    <logicalFolder name="ExternalFiles"
+                   displayName="Important Files"
+                   projectFiles="false"
+                   kind="IMPORTANT_FILES_FOLDER">
+      <itemPath>Makefile</itemPath>
+    </logicalFolder>
+  </logicalFolder>
+  <projectmakefile>Makefile</projectmakefile>
+  <confs>
+    <conf name="Debug" type="1">
+      <toolsSet>
+        <compilerSet>default</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>false</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <ccTool>
+          <warningLevel>2</warningLevel>
+        </ccTool>
+      </compileType>
+      <item path="Chain.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Chain.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Database.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Database.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Job.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Pool.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Pool.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="PoolChain.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="PoolChain.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="PoolDatabase.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="PoolDatabase.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="PoolJob.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="PoolWorld.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="PoolWorld.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="World.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="World.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="main_coordinator.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="main_pool.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="main_pool.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="pipebuffer.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="pipesparams.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="readparams.h" ex="false" tool="3" flavor2="0">
+      </item>
+    </conf>
+    <conf name="Release" type="1">
+      <toolsSet>
+        <compilerSet>default</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>false</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <cTool>
+          <developmentMode>5</developmentMode>
+        </cTool>
+        <ccTool>
+          <developmentMode>5</developmentMode>
+        </ccTool>
+        <fortranCompilerTool>
+          <developmentMode>5</developmentMode>
+        </fortranCompilerTool>
+        <asmTool>
+          <developmentMode>5</developmentMode>
+        </asmTool>
+      </compileType>
+      <item path="Chain.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Chain.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Database.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Database.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Job.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Pool.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Pool.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="PoolChain.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="PoolChain.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="PoolDatabase.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="PoolDatabase.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="PoolJob.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="PoolWorld.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="PoolWorld.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="World.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="World.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="main_coordinator.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="main_pool.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="main_pool.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="pipebuffer.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="pipesparams.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="readparams.h" ex="false" tool="3" flavor2="0">
+      </item>
+    </conf>
+  </confs>
+</configurationDescriptor>
