@@ -1,0 +1,2 @@
+total sum is 5050
+mo is 50.000000
