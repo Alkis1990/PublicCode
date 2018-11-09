@@ -1,0 +1,153 @@
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("./assets/back-image.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+/* General Classes */
+
+.flex {
+  display: flex;
+}
+
+/* Header */
+header {
+  height: 10vh;
+  display: flex;
+  background-color: rgba(240, 240, 240, 0.9);
+}
+
+.logo {
+  max-width: 7%;
+}
+
+.profile {
+  display: flex;
+  align-items: flex-end;
+  margin-bottom: 5px;
+  margin-left: auto;
+  margin-right: 5px;
+}
+
+.profile .fa-user {
+  margin-right: 5px;
+}
+
+/* Main */
+main {
+  height: 85vh;
+  padding-top: 10vh;
+}
+
+footer
+.ui-page.ui-responsive > #footer-box, {
+  position:absolute;
+  bottom:0;
+  width:100%;
+  height:60px;   /* Height of the footer */
+  background:#6cf;
+}
+
+
+/* Reusable classes */
+.responsive {
+  width: 100%;
+  height: auto;
+}
+
+/* ADD NEW THINKS */
+.hotel-details {
+  padding: 10px;
+}
+
+.hotel-img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 90%;
+}
+
+.ui-grid-solo.ui-responsive {
+    margin-bottom: 20%;
+}
+
+.book-now{
+  text-align: right;
+}
+
+.vertical-row {
+  border-right: 2px solid red;
+  margin: 0 20px;
+}
+
+
+
+.ui-page {
+  background: none;
+  display: flex;
+}
+
+
+
+hr {
+  -moz-border-bottom-colors: none;
+  -moz-border-image: none;
+  -moz-border-left-colors: none;
+  -moz-border-right-colors: none;
+  -moz-border-top-colors: none;
+  border-color: #EEEEEE -moz-use-text-color #FFFFFF;
+  border-style: solid none;
+  border-width: 1px 0;
+  margin: 18px 0;
+}
+
+
+
+.ui-slider-track .ui-btn.ui-slider-handle {
+  width: 10px;
+  margin: -14px 0 0 -6px;
+}
+
+
+.checked {
+  color: orange;
+}
+main > div{
+border-radius: 10px;
+  margin-left: 15%;
+  width: 70% !important;
+  display: inline-block;
+  margin-top: 0%;
+  background-color: rgba(240, 240, 240, 0.9);
+}
+
+.mapouter{
+  text-align:right;
+  height:500px;
+  width:600px;
+  margin-left: auto;
+  margin-right: auto; 
+}
+.gmap_canvas {
+  overflow:hidden;
+  background:none!important;
+  height:500px;
+  width:600px; 
+}
+
+iframe{               
+  height:500px;
+  width:600px;
+}
+
+.comments{
+font-family:sans-serif;
+font-size:1.2em;
+}
+.submit{
+  text-align:center;
+}
