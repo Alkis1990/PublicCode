@@ -74,7 +74,6 @@ while($u = $res_u->fetch_object()){
         </div>
     </header>
     <main id="main">
-
         <div class="ui-grid-solo ui-responsive">
             <form action="../page2/index.php" method='post' data-ajax='false'>
                 <div class="ui-grid-a ui-responsive">
@@ -110,7 +109,6 @@ while($u = $res_u->fetch_object()){
                 <div class="ui-grid-a ui-responsive">
                     <div class="ui-block-a">
                         <input placeholder="Arrive" required class="form-control datepicker" type="text" name="date_from" />
-
                     </div>
                     <div class="ui-block-b">
                         <input placeholder="Leave" required class="form-control datepicker" type="text" name="date_to" />
@@ -119,7 +117,6 @@ while($u = $res_u->fetch_object()){
                 <div class="submit">
                     <input type="submit" value="Search">
                 </div>
-
             </form>
         </div>
     </main>

@@ -150,7 +150,6 @@ while($r = $res_r->fetch_object()){
         <div class="ui-grid-a ui-responsive">
             <div class="ui-block-a">
                 <section>
-
                     <form method="post" action="" data-ajax="false">
                         <div>
                             <select class="roomtype" id="roomtype" name="type">
@@ -199,7 +198,6 @@ while($r = $res_r->fetch_object()){
                                             name="date_to" value="<?php echo $date_to ?>" />
                                     </div>
                                     <input type="submit" data-inline="true" value="Search">
-
                                 </div>
                             </div>
                         </div>
@@ -250,7 +248,6 @@ while($r = $res_r->fetch_object()){
                                 </div>
                             </div>
                             <div class="ui-grid-b" id="card-box">
-
                                 <div class="ui-block-a" id="bl">Price per night:
                                     <?php echo $r->price; ?>&euro;</div>
                                 <div class="ui-block-b" id="bl">Count of guests:
@@ -259,21 +256,15 @@ while($r = $res_r->fetch_object()){
                                 <div class="ui-block-c" id="bl">Room type:
                                     <?php echo $r->room_type; ?>
                                 </div>
-
                             </div>
-
-
                             <hr>
                         </li>
                         <?php
                     }
                         ?>
-
                         <ul>
                 </div>
             </div>
-
-
     </main>
 
     <div data-role="footer" data-position="fixed" data-tap-toggle="false">
@@ -289,7 +280,6 @@ while($r = $res_r->fetch_object()){
             <a href="../contact_us/index.php" data-ajax="false">Contact Us</a>
         </span>
     </div>
-
     </div>
 
     <script>

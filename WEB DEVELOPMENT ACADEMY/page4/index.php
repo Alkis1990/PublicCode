@@ -179,7 +179,8 @@ if($res_fav->num_rows > 0){
                     <?php
                     if($in_favs){
                     ?>
-                    <input style='background: #0f0!important; color: #fff;width: 100%;padding: 10px; ' type='button' value='Remove from Favorites' onclick='toggle_to_favorites(<?php echo $room_id ?>);'>
+                    <input style='background: #0f0!important; color: #fff;width: 100%;padding: 10px; ' type='button'
+                        value='Remove from Favorites' onclick='toggle_to_favorites(<?php echo $room_id ?>);'>
                     <?php
                     }else{
                     ?>
@@ -227,7 +228,7 @@ if($res_fav->num_rows > 0){
             </div>
             <hr>
             <div class="hotel-description">
-                <h4>Hotel-Description</h4>
+                <h4>Hotel Description</h4>
                 <p>
                     <?php echo $room->long_description; ?>
                 </p>
@@ -236,32 +237,38 @@ if($res_fav->num_rows > 0){
                 <?php
                 if(isset($error_message) && $error_message){
                 ?>
-                <div class="alert alert-danger" ><?php echo $error_message; ?></div>
+                <div class="alert alert-danger">
+                    <?php echo $error_message; ?>
+                </div>
                 <?php
                 }
                 ?>
                 <?php
                 if(isset($success_message) && $success_message){
                 ?>
-                <div class='alert alert-success'><?php echo $success_message; ?></div>
+                <div class='alert alert-success'>
+                    <?php echo $success_message; ?>
+                </div>
                 <?php
                 }
                 ?>
                 <input type="hidden" name="booking_r" value="bbb" />
-                <div class="ui-grid-a ui-responsive">
+                <div class="ui-grid-a ui-responsive confirm">
+                    <h5>Date confirmation</h5>
+                    <br>
                     <div class="ui-block-a">
-                        <input placeholder="Arrive" required class="form-control datepicker" type="text" name="date_from" value="<?php echo @$_SESSION['date_from']; ?>" />
-
+                        <span>From:</span><input placeholder="Arrive" required class="form-control datepicker" type="text"
+                            name="date_from" value="<?php echo @$_SESSION['date_from']; ?>" />
                     </div>
                     <div class="ui-block-b">
-                        <input placeholder="Leave" required class="form-control datepicker" type="text" name="date_to" value="<?php echo @$_SESSION['date_to']; ?>"/>
+                        <span>To:</span><input placeholder="Leave" required class="form-control datepicker" type="text"
+                            name="date_to" value="<?php echo @$_SESSION['date_to']; ?>" />
                     </div>
                 </div>
                 <div class="book-now">
                     <input type="submit" data-inline="true" value="Book Now">
                 </div>
             </form>
-
             <hr>
             <div class="map">
                 <h2>Hotel Location</h2>
@@ -310,20 +317,25 @@ if($res_fav->num_rows > 0){
                 <?php
                 foreach($reviews as $r){
                 ?>
-                <p> <?php echo $r->username; ?></p>
+                <p>
+                    <?php echo $r->username; ?>
+                </p>
                 <span class="fa fa-star <?php echo $r->rate >= 1 ? 'checked' : ''; ?>"></span>
                 <span class="fa fa-star <?php echo $r->rate >= 2 ? 'checked' : ''; ?>"></span>
                 <span class="fa fa-star <?php echo $r->rate >= 3 ? 'checked' : ''; ?>"></span>
                 <span class="fa fa-star <?php echo $r->rate >= 4 ? 'checked' : ''; ?>"></span>
                 <span class="fa fa-star <?php echo $r->rate >= 5 ? 'checked' : ''; ?>"></span>
-                <p> <?php echo nl2br($r->text); ?></p>
-                <p style='color: #777;font-size: 0.8em;'><?php echo date('d-m-Y H:i:s', strtotime($r->date_created)) ?></p>
+                <p>
+                    <?php echo nl2br($r->text); ?>
+                </p>
+                <p style='color: #777;font-size: 0.8em;'>
+                    <?php echo date('d-m-Y H:i:s', strtotime($r->date_created)) ?>
+                </p>
                 <?php
                 }
                 ?>
             </div>
         </div>
-
     </main>
 
     <div data-role="footer" data-position="fixed" data-tap-toggle="false">
@@ -341,31 +353,33 @@ if($res_fav->num_rows > 0){
     </div>
     </div>
     <script>
-    $(document).ready(function(){
-        $('.datepicker').datepicker({format: 'dd-mm-yyyy'});
-    });
-    function toggle_to_favorites(room_id){
-        $.ajax({
-            method: 'post',
-            url: './favs.php',
-            data: {
-                room_id: room_id
-            },
-            dataType: 'json',
-            success: function(response){
-                if(response.success){
-                    $('#atf_container').html(response.message);
-                    $('input[type=button]').button();
+        $(document).ready(function () {
+            $('.datepicker').datepicker({
+                format: 'dd-mm-yyyy'
+            });
+        });
+
+        function toggle_to_favorites(room_id) {
+            $.ajax({
+                method: 'post',
+                url: './favs.php',
+                data: {
+                    room_id: room_id
+                },
+                dataType: 'json',
+                success: function (response) {
+                    if (response.success) {
+                        $('#atf_container').html(response.message);
+                        $('input[type=button]').button();
+                    } else {
+                        alert(response.message);
+                    }
+                },
+                error: function (response) {
+                    console.log(response);
                 }
-                else{
-                    alert(response.message);
-                }
-            },
-            error: function(response){
-                console.log(response);
-            }
-        })
-    }
+            })
+        }
     </script>
 
 </body>

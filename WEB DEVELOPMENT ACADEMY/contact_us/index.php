@@ -62,7 +62,6 @@ while($u = $res_u->fetch_object()){
         </div>
     </header>
     <main id="main">
-
         <div class="ui-grid-solo ui-responsive">
             <div class="ui-grid-b ui-responsive">
                 <div class="aa">
@@ -88,7 +87,6 @@ while($u = $res_u->fetch_object()){
                     <span><i class="fas fa-mail-bulk"></i></span>
                     <span>info@euro-tripper.com</span>
                 </div>
-
             </div>
             <hr>
             <div class="mapouter">
@@ -98,10 +96,6 @@ while($u = $res_u->fetch_object()){
                     </iframe>
                 </div>
             </div>
-
-
-
-
         </div>
     </main>
     <div data-role="footer" data-position="fixed" data-tap-toggle="false">

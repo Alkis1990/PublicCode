@@ -62,7 +62,6 @@ while($u = $res_u->fetch_object()){
         </div>
     </header>
     <main id="main">
-
         <div class="ui-grid-solo ui-responsive">
             <div class="aa">
                 <h1>About US</h1>
@@ -78,7 +77,6 @@ while($u = $res_u->fetch_object()){
                 <br />
                 Now Euro-Tripper is one of the most popular hotel booking Web Sites and thanks to you.
             </p>
-
         </div>
     </main>
     <div data-role="footer" data-position="fixed" data-tap-toggle="false">

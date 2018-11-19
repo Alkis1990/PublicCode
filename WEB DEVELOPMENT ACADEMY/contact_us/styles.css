@@ -18,7 +18,7 @@ body {
 header {
   height: 10vh;
   display: flex;
-  background-color: rgba(240, 240, 240, 0.9);
+  background-color: rgba(240, 240, 240, 0.8);
 }
 
 .logo {
@@ -51,7 +51,7 @@ main {
 
 
 .ui-grid-solo.ui-responsive {
-    margin-bottom: 20%;
+  margin-bottom: 20%;
 }
 
 
@@ -66,49 +66,49 @@ main {
   margin: -14px 0 0 -6px;
 }
 
-main > div{
-border-radius: 10px;
-padding: 1%;
+main>div {
+  border-radius: 10px;
+  padding: 1%;
   margin-left: 30%;
   width: 40% !important;
   display: inline-block;
   margin-top: 2%;
-  background-color: rgba(240, 240, 240, 0.9);
+  background-color: rgba(240, 240, 240, 0.8);
 }
 
-.aa{
+.aa {
   text-align: center;
   width: 40%;
   margin: auto;
 }
 
-  hr {
-    -moz-border-bottom-colors: none;
-    -moz-border-image: none;
-    -moz-border-left-colors: none;
-    -moz-border-right-colors: none;
-    -moz-border-top-colors: none;
-    border-color: #EEEEEE -moz-use-text-color #FFFFFF;
-    border-style: solid none;
-    border-width: 1px 0;
-    margin: 18px 0;
-  }
-  
-  .mapouter{
-    text-align:right;
-    height:500px;
-    width:600px;
-    margin-left: auto;
-    margin-right: auto; 
-  }
-  
-  
-  iframe{               
-    height:500px;
-    width:600px;
-  }
+hr {
+  -moz-border-bottom-colors: none;
+  -moz-border-image: none;
+  -moz-border-left-colors: none;
+  -moz-border-right-colors: none;
+  -moz-border-top-colors: none;
+  border-color: #EEEEEE -moz-use-text-color #FFFFFF;
+  border-style: solid none;
+  border-width: 1px 0;
+  margin: 18px 0;
+}
 
-   /* footer */
+.mapouter {
+  text-align: right;
+  height: 500px;
+  width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+
+iframe {
+  height: 500px;
+  width: 600px;
+}
+
+/* footer */
 .coded_by {
   display: inline-block;
   text-align: right;
@@ -128,26 +128,27 @@ padding: 1%;
   width: 40%;
   margin: auto;
 }
-  
+
 /* media queries  */
 
 @media screen and (max-width: 460px) {
-  main > div {
+  main>div {
     width: 100% !important;
     margin-left: 0%;
-        padding: auto;
-        margin: auto;
+    padding: auto;
+    margin: auto;
   }
-  .submit{
+
+  .submit {
     width: 100%;
   }
 }
 
 @media screen and (max-width: 800px) {
-  main > div {
+  main>div {
     width: 80% !important;
     margin-left: 10%;
-      
+
   }
-  
+
 }

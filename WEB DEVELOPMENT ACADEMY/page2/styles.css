@@ -18,7 +18,7 @@ body {
 header {
   height: 10vh;
   display: flex;
-  background-color: rgba(240, 240, 240, 0.9);
+  background-color: rgba(240, 240, 240, 0.8);
 }
 
 .logo {
@@ -62,7 +62,8 @@ main {
   margin-right: auto;
   width: 90%;
 }
-.room-view-button >a{
+
+.room-view-button>a {
   text-decoration: none;
 }
 
@@ -70,43 +71,46 @@ main {
   border-right: 2px solid red;
   margin: 0 20px;
 }
-.ui-grid-a.ui-responsive{
+
+.ui-grid-a.ui-responsive {
   margin-bottom: 20%;
 }
 
 /* grid searchlist */
-.ui-grid-a >.ui-block-a {
+.ui-grid-a>.ui-block-a {
   border-radius: 10px;
   margin-left: 1.5%;
   width: 20% !important;
   display: inline-block;
   margin-top: 0%;
-  background-color: rgba(240, 240, 240, 0.9);
+  background-color: rgba(240, 240, 240, 0.8);
 }
+
 /* grid search results */
-.ui-grid-a >.ui-block-b {
+.ui-grid-a>.ui-block-b {
   width: 55% !important;
   flex: 1;
   align-items: center;
   margin: 0 10%;
-  background-color: rgba(240, 240, 240, 0.9);
+  background-color: rgba(240, 240, 240, 0.8);
   border-radius: 10px;
 }
 
-h1{
+h1 {
   text-align: center;
   width: 40%;
   margin: auto;
 }
 
-#card-box{
+#card-box {
   border-radius: 10px;
   background-color: rgba(231, 181, 181, 0.9);
 }
-.all.results{
-    overflow: auto;
-    -webkit-overflow-scrolling: touch;
-    max-height: 250px;
+
+.all.results {
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  max-height: 250px;
 }
 
 .ui-page {
@@ -135,7 +139,8 @@ hr {
   margin: -14px 0 0 -6px;
 }
 
-.all.bookings,.hotel-details{
+.all.bookings,
+.hotel-details {
   list-style-type: none;
 }
 
@@ -145,36 +150,40 @@ hr {
   font-weight: bold;
 }
 
-:-moz-placeholder { /* Firefox 18- */
-  text-align: center;  
+:-moz-placeholder {
+  /* Firefox 18- */
+  text-align: center;
   font-weight: bold;
 }
 
-::-moz-placeholder {  /* Firefox 19+ */
-  text-align: center;  
+::-moz-placeholder {
+  /* Firefox 19+ */
+  text-align: center;
   font-weight: bold;
 }
 
-:-ms-input-placeholder {  
-  text-align: center; 
+:-ms-input-placeholder {
+  text-align: center;
   font-weight: bold;
 }
 
 
 /* footer */
-.coded_by{
+.coded_by {
   display: inline-block;
   text-align: right;
   width: 40%;
   margin: auto;
 }
-.copyrights{
+
+.copyrights {
   display: inline-block;
   text-align: left;
   width: 40%;
   margin: auto;
 }
-.footer_Href{
+
+.footer_Href {
   text-align: right;
   width: 40%;
   margin: auto;
@@ -186,11 +195,11 @@ hr {
 /* media queries  */
 
 @media screen and (max-width: 800px) {
-  .ui-grid-a.ui-responsive{
-margin-right: -12%
+  .ui-grid-a.ui-responsive {
+    margin-right: -12%
   }
 
-  .ui-grid-a >.ui-block-a{
+  .ui-grid-a>.ui-block-a {
     margin-left: 1.5%;
     width: 30% !important;
     display: inline-block;
@@ -198,37 +207,36 @@ margin-right: -12%
 
   }
 
-  .ui-grid-a >.ui-block-b {
+  .ui-grid-a>.ui-block-b {
     width: 55% !important;
     flex: 1;
     align-items: center;
-    margin: 0  5px;
-    background-color: rgba(240, 240, 240, 0.9);
+    margin: 0 5px;
+    background-color: rgba(240, 240, 240, 0.8);
     border-radius: 10px;
   }
-  
+
 }
 
-@media screen and (max-width: 460px) {
-  .ui-grid-a >.ui-block-a{
+@media screen and (max-width: 500px) {
+  .ui-grid-a>.ui-block-a {
     margin-left: 1.5%;
     margin-right: 1.5%;
     width: 86% !important;
     display: inline-block;
     margin-top: 0%;
   }
+
   .ui-btn-inline {
     display: grid;
   }
-  
-  .ui-grid-a >.ui-block-b {
+
+  .ui-grid-a>.ui-block-b {
     margin-left: 1.5%;
     margin-right: 1.5%;
     width: 86% !important;
     display: inline-block;
     margin-top: 0%;
   }
-  
+
 }
-
-

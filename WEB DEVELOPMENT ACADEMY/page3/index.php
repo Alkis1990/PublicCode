@@ -96,8 +96,9 @@ while($re = $fav_re->fetch_object()){
                 <ol>
                     <?php foreach ($favorites as $f) {
                         ?>
-                    <li><a data-ajax="false" href="../page4/index.php?room_id=<?php echo $f->room_id; ?>"><?php echo $f->name;?></a></li>
-                <?php } ?>
+                    <li><a data-ajax="false" href="../page4/index.php?room_id=<?php echo $f->room_id; ?>">
+                            <?php echo $f->name;?></a></li>
+                    <?php } ?>
                 </ol>
                 <h2>Reviews</h2>
                 <hr>
@@ -105,16 +106,17 @@ while($re = $fav_re->fetch_object()){
                     <?php 
                     foreach ($reviews as $r){ 
                     ?>
-                    <p> <?php echo $r->name; ?></p>
-                <span class="fa fa-star <?php echo $r->rate >= 1 ? 'checked' : ''; ?>"></span>
-                <span class="fa fa-star <?php echo $r->rate >= 2 ? 'checked' : ''; ?>"></span>
-                <span class="fa fa-star <?php echo $r->rate >= 3 ? 'checked' : ''; ?>"></span>
-                <span class="fa fa-star <?php echo $r->rate >= 4 ? 'checked' : ''; ?>"></span>
-                <span class="fa fa-star <?php echo $r->rate >= 5 ? 'checked' : ''; ?>"></span>
+                    <p>
+                        <?php echo $r->name; ?>
+                    </p>
+                    <span class="fa fa-star <?php echo $r->rate >= 1 ? 'checked' : ''; ?>"></span>
+                    <span class="fa fa-star <?php echo $r->rate >= 2 ? 'checked' : ''; ?>"></span>
+                    <span class="fa fa-star <?php echo $r->rate >= 3 ? 'checked' : ''; ?>"></span>
+                    <span class="fa fa-star <?php echo $r->rate >= 4 ? 'checked' : ''; ?>"></span>
+                    <span class="fa fa-star <?php echo $r->rate >= 5 ? 'checked' : ''; ?>"></span>
                     <?php
                     }
                     ?>
-                    
                 </ol>
             </div>
 
@@ -152,34 +154,32 @@ while($re = $fav_re->fetch_object()){
                                         </h5>
                                     </div>
                                     <div class="room-view-button">
-                                    <a href="../page4/index.php?room_id=<?php echo $r->room_id; ?>" data-ajax="false">
-                                        <input type="button" class="room_overview" value="Room Overview"></a>
+                                        <a href="../page4/index.php?room_id=<?php echo $r->room_id; ?>" data-ajax="false">
+                                            <input type="button" class="room_overview" value="Room Overview"></a>
                                     </div>
                                 </div>
                             </div>
                             <div class="ui-grid-c" id="card-box">
-                            <div class="ui-block-a">
-                                <div class="ui-bar ui-bar-a">Stay from :
-                                    <?php echo date('d-m-Y', strtotime($b->check_in_date)); ?>
+                                <div class="ui-block-a">
+                                    <div class="ui-bar ui-bar-a">Stay from :
+                                        <?php echo date('d-m-Y', strtotime($b->check_in_date)); ?>
                                     </div>
                                 </div>
                                 <div class="ui-block-b">
-                                <div class="ui-bar ui-bar-a">Leave on:
-                                    <?php echo date('d-m-Y', strtotime($b->check_out_date)); ?>
+                                    <div class="ui-bar ui-bar-a">Leave on:
+                                        <?php echo date('d-m-Y', strtotime($b->check_out_date)); ?>
                                     </div>
                                 </div>
                                 <div class="ui-block-c">
-                                <div class="ui-bar ui-bar-a">Total cost:
-                                    <?php echo $b->price * $b->num_days; ?>&euro;</div>
+                                    <div class="ui-bar ui-bar-a">Total cost:
+                                        <?php echo $b->price * $b->num_days; ?>&euro;</div>
+                                </div>
+                                <div class="ui-block-d">
+                                    <div class="ui-bar ui-bar-a">Room type:
+                                        <?php echo $b->room_type; ?>
                                     </div>
-                                    <div class="ui-block-d">
-                                <div class="ui-bar ui-bar-a">Room type:
-                                    <?php echo $b->room_type; ?>
                                 </div>
-                                </div>
-
                             </div>
-
                             <hr>
                         </li>
                         <?php
@@ -188,8 +188,6 @@ while($re = $fav_re->fetch_object()){
                         <ul>
                 </div>
             </div>
-
-
     </main>
 
     <div data-role="footer" data-position="fixed" data-tap-toggle="false">
@@ -205,9 +203,7 @@ while($re = $fav_re->fetch_object()){
             <a href="../contact_us/index.php" data-ajax="false">Contact Us</a>
         </span>
     </div>
-
     </div>
-
 
 </body>
 
