@@ -1,0 +1,24 @@
+
+#ifndef TIMESPAN_H
+#define TIMESPAN_H
+
+#define X_CONSTRUCTION_MIN_T 990
+#define X_CONSTRUCTION_MAX_T 2018
+
+#define Y_CONSTRUCTION_MIN_T 1500
+#define Y_CONSTRUCTION_MAX_T 3100
+
+#define Z_CONSTRUCTION_MIN_T 1900
+#define Z_CONSTRUCTION_MAX_T 2700
+
+#define X_PAINT_T 3250
+#define Y_PAINT_T 4000
+#define Z_PAINT_T 2175
+
+#define X_VERIFY_T 3612
+#define Y_VERIFY_T 4080
+#define Z_VERIFY_T 2566
+
+#define _ASSEMBLE 3166
+
+#endif /*TIMESPAN_H*/
