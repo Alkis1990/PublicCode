@@ -1,0 +1,139 @@
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("./assets/back-image.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+/* General Classes */
+
+.flex {
+  display: flex;
+}
+
+/* Header */
+header {
+  height: 10vh;
+  display: flex;
+  background-color: rgba(240, 240, 240, 0.8);
+}
+
+.logo {
+  max-width: 50%;
+}
+
+.profile {
+  display: flex;
+  align-items: flex-end;
+  margin-bottom: 5px;
+  margin-left: auto;
+  margin-right: 5px;
+}
+
+.profile .fa-user {
+  margin-right: 5px;
+}
+
+/* Main */
+main {
+  height: 85vh;
+  padding-top: 10vh;
+}
+
+/* Reusable classes */
+.responsive {
+  width: 100%;
+  height: auto;
+}
+
+
+.ui-grid-solo.ui-responsive {
+  margin-bottom: 20%;
+}
+
+
+.ui-page {
+  background: none;
+  display: flex;
+}
+
+.ui-slider-track .ui-btn.ui-slider-handle {
+  width: 10px;
+  margin: -14px 0 0 -6px;
+}
+
+main>div {
+  border-radius: 10px;
+  padding: 1%;
+  margin-left: 30%;
+  width: 40% !important;
+  display: inline-block;
+  margin-top: 2%;
+  background-color: rgba(240, 240, 240, 0.8);
+}
+
+.aa {
+  text-align: center;
+  width: 40%;
+  margin: auto;
+}
+
+hr {
+  -moz-border-bottom-colors: none;
+  -moz-border-image: none;
+  -moz-border-left-colors: none;
+  -moz-border-right-colors: none;
+  -moz-border-top-colors: none;
+  border-color: #EEEEEE -moz-use-text-color #FFFFFF;
+  border-style: solid none;
+  border-width: 1px 0;
+  margin: 18px 0;
+}
+
+/* footer */
+.coded_by {
+  display: inline-block;
+  text-align: right;
+  width: 40%;
+  margin: auto;
+}
+
+.copyrights {
+  display: inline-block;
+  text-align: left;
+  width: 40%;
+  margin: auto;
+}
+
+.footer_Href {
+  text-align: right;
+  width: 40%;
+  margin: auto;
+}
+
+/* media queries  */
+
+@media screen and (max-width: 460px) {
+  main>div {
+    width: 100% !important;
+    margin-left: 0%;
+    padding: auto;
+    margin: auto;
+  }
+
+  .submit {
+    width: 100%;
+  }
+}
+
+@media screen and (max-width: 800px) {
+  main>div {
+    width: 80% !important;
+    margin-left: 10%;
+
+  }
+
+}
