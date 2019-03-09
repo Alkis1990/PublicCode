@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        is-multidex="true"
+        jar="/Users/alkiviadis/Desktop/anaptiksi/gitdirectory1/project1/Application1/app/build/intermediates/exploded-aar/com.android.support/support-core-ui/24.2.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="e7f3132168957eefc46229fc32c3bd464642b71e">
+        <dex dex="/Users/alkiviadis/Desktop/anaptiksi/gitdirectory1/project1/Application1/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-core-ui-24.2.1_a0df0b66af649a360d3c6d7191030350092a5451/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/alkiviadis/Desktop/anaptiksi/gitdirectory1/project1/Application1/app/build/intermediates/exploded-aar/com.android.support/support-compat/24.2.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="0ecb4b595fa0f0f8018a149ace3ea6525624f94e">
+        <dex dex="/Users/alkiviadis/Desktop/anaptiksi/gitdirectory1/project1/Application1/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-compat-24.2.1_9c377dd84d4aa215935ba0277717e4f40b8162c2/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/alkiviadis/Desktop/anaptiksi/gitdirectory1/project1/Application1/app/build/intermediates/exploded-aar/com.android.support/support-v4/24.2.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="d7c42c80f6509b9ea4db28ca7859ffae08ec5741">
+        <dex dex="/Users/alkiviadis/Desktop/anaptiksi/gitdirectory1/project1/Application1/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-v4-24.2.1_6c61b0d65ee83d7c02b9af5b14c6a8bc70a4b62c/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/alkiviadis/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/24.2.1/support-annotations-24.2.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="8de3aafecbdf98a61db6427f008f2d515bcd2544">
+        <dex dex="/Users/alkiviadis/Desktop/anaptiksi/gitdirectory1/project1/Application1/app/build/intermediates/transforms/dex/debug/folders/1000/10/support-annotations-24.2.1_a7dfd174675786fe1d88958585174565f577b788/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/alkiviadis/Desktop/anaptiksi/gitdirectory1/project1/Application1/app/build/intermediates/exploded-aar/com.android.support/support-fragment/24.2.1/jars/libs/internal_impl-24.2.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="5f64d657e838e8375135c0f6057a7ff8fab6a50e">
+        <dex dex="/Users/alkiviadis/Desktop/anaptiksi/gitdirectory1/project1/Application1/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-24.2.1_b54895c6a1b17fa7532e8768c83ae7ee3298e13b/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/alkiviadis/Desktop/anaptiksi/gitdirectory1/project1/Application1/app/build/intermediates/exploded-aar/com.android.support/support-compat/24.2.1/jars/libs/internal_impl-24.2.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="7e4389bd133359a2ff88623ff1e4ff93d6e6f780">
+        <dex dex="/Users/alkiviadis/Desktop/anaptiksi/gitdirectory1/project1/Application1/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-24.2.1_b9ebd223bf5537de90e42795b62892769201a8f7/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/alkiviadis/Desktop/anaptiksi/gitdirectory1/project1/Application1/app/build/intermediates/exploded-aar/com.android.support/animated-vector-drawable/24.2.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="94bc1dfb84dcc8b6f6f8f7cc726d7b2dd39c1574">
+        <dex dex="/Users/alkiviadis/Desktop/anaptiksi/gitdirectory1/project1/Application1/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-animated-vector-drawable-24.2.1_b4b24d2c463e0a174067c59480c79228ca6fee30/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/alkiviadis/Desktop/anaptiksi/gitdirectory1/project1/Application1/app/build/intermediates/exploded-aar/com.android.support/support-vector-drawable/24.2.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="d5c731fc64c03dfe04d51134955b483551c35849">
+        <dex dex="/Users/alkiviadis/Desktop/anaptiksi/gitdirectory1/project1/Application1/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-vector-drawable-24.2.1_be65b7a4ce36ce29cbec990fc47460a275b9a3fa/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/alkiviadis/Desktop/anaptiksi/gitdirectory1/project1/Application1/app/build/intermediates/exploded-aar/com.android.support/support-core-utils/24.2.1/jars/libs/internal_impl-24.2.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="935a969265b2a166b2d20415423f5f6e90fe16e0">
+        <dex dex="/Users/alkiviadis/Desktop/anaptiksi/gitdirectory1/project1/Application1/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-24.2.1_6a272331f59331024c7209219780b44668f1809b/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/alkiviadis/Desktop/anaptiksi/gitdirectory1/project1/Application1/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/24.2.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="43b2dba6b5a0b14527961b75329d0b90025f15ea">
+        <dex dex="/Users/alkiviadis/Desktop/anaptiksi/gitdirectory1/project1/Application1/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-appcompat-v7-24.2.1_fcac2878ab3fd7a075418491de0a9dd2be4236f7/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/alkiviadis/Desktop/anaptiksi/gitdirectory1/project1/Application1/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="d0e46563b5769119ecfd28674f52b4fa22cbceb3">
+        <dex dex="/Users/alkiviadis/Desktop/anaptiksi/gitdirectory1/project1/Application1/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run_42e8249e76ff6d2f9f15bc294ad45022277a15d3/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/alkiviadis/Desktop/anaptiksi/gitdirectory1/project1/Application1/app/build/intermediates/exploded-aar/com.android.support/support-media-compat/24.2.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="09b462bbcb77650284bd6614f1a32f360ef369f8">
+        <dex dex="/Users/alkiviadis/Desktop/anaptiksi/gitdirectory1/project1/Application1/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-media-compat-24.2.1_e27f28ae1d55dddb345f289671d13f2e654e45e3/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/alkiviadis/Desktop/anaptiksi/gitdirectory1/project1/Application1/app/build/intermediates/exploded-aar/com.android.support/support-core-ui/24.2.1/jars/libs/internal_impl-24.2.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="867dad63c33388ff8c7644b236579355036d075f">
+        <dex dex="/Users/alkiviadis/Desktop/anaptiksi/gitdirectory1/project1/Application1/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-24.2.1_c04b6bd0039c278b71f862d2b2e07d35efdb24d6/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/alkiviadis/Desktop/anaptiksi/gitdirectory1/project1/Application1/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="e4a8ef403f39b29e7fb22ed66909772fbfbe929b">
+        <dex dex="/Users/alkiviadis/Desktop/anaptiksi/gitdirectory1/project1/Application1/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run-bootstrap_8bc265cab4d3a71b71a55f1323da63c591ac17c8/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/alkiviadis/Desktop/anaptiksi/gitdirectory1/project1/Application1/app/build/intermediates/exploded-aar/com.android.support/support-media-compat/24.2.1/jars/libs/internal_impl-24.2.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="fbf8da429efd5ad21e02e3e5ecaa1efc4167878d">
+        <dex dex="/Users/alkiviadis/Desktop/anaptiksi/gitdirectory1/project1/Application1/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-24.2.1_ec31880ac3183354b81fea64a2de9d844933b5ec/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/alkiviadis/Desktop/anaptiksi/gitdirectory1/project1/Application1/app/build/intermediates/exploded-aar/com.android.support/support-fragment/24.2.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="b9a1ac78ad7ef3abedc4a4b30cd92bcacb939d1f">
+        <dex dex="/Users/alkiviadis/Desktop/anaptiksi/gitdirectory1/project1/Application1/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-fragment-24.2.1_7339ea2ad2d4539dd03e284a9d9dceedcbb746af/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/alkiviadis/Desktop/anaptiksi/gitdirectory1/project1/Application1/app/libs/org.eclipse.paho.client.mqttv3-1.0.2.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="e1c9a81aadf25b884c779298a90750d0ab8013a5">
+        <dex dex="/Users/alkiviadis/Desktop/anaptiksi/gitdirectory1/project1/Application1/app/build/intermediates/transforms/dex/debug/folders/1000/2/org.eclipse.paho.client.mqttv3-1.0.2_03a516b3e8e57ff025d489dd37f7b1cc31b047ea/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/alkiviadis/Desktop/anaptiksi/gitdirectory1/project1/Application1/app/build/intermediates/exploded-aar/com.android.support/support-core-utils/24.2.1/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="24.0.3"
+        sha1="9c4c3bc902450c39ed54de170db4fb12aea20a35">
+        <dex dex="/Users/alkiviadis/Desktop/anaptiksi/gitdirectory1/project1/Application1/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-core-utils-24.2.1_e245c7624eae4f3d59bb175411e4bfec3df082cd/classes.dex" />
+    </item>
+
+</items>
