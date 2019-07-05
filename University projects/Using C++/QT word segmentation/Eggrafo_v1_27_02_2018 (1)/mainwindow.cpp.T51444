@@ -1,0 +1,1339 @@
+#include "mainwindow.h"
+#include "ui_mainwindow.h"
+
+#include <QMessageBox>
+#include <QFile>
+#include <QFileDialog>
+using namespace std;
+
+#include "opencv2/imgproc/imgproc.hpp"
+#include "opencv2/imgproc/types_c.h"
+
+#include "opencv2/imgproc.hpp"
+#include "opencv2/highgui.hpp"
+#include "opencv2/imgcodecs.hpp"
+
+#include<string>
+
+//////////////////////////////////////////////
+#include "opencv2/imgcodecs.hpp"
+#include "opencv2/highgui.hpp"
+#include "opencv2/imgproc.hpp"
+#include <iostream>
+
+using namespace cv;
+using namespace std;
+
+/// Global variables
+
+/** General variables */
+Mat src, edges;
+Mat src_gray;
+Mat standard_hough, probabilistic_hough;
+int min_threshold = 50;
+int max_trackbar = 300;
+
+const char* standard_name = "Standard Hough Lines Demo";
+const char* probabilistic_name = "Probabilistic Hough Lines Demo";
+
+int s_trackbar = max_trackbar;
+int p_trackbar = max_trackbar;
+
+/// Function Headers
+void help();
+void Standard_Hough( int, void* );
+void Probabilistic_Hough( int, void* );
+
+void findPeaks(vector<float> x0, vector<int>& peakInds);
+
+/////////////////////////////////////////////
+
+
+MainWindow::MainWindow(QWidget *parent) :
+    QMainWindow(parent),
+    ui(new Ui::MainWindow)
+{
+    ui->setupUi(this);
+
+    Iy=0;
+    Ix=0;
+    bpp=0;
+
+    // sender, signal, receiver, slot
+    connect(ui->actionOpen, &QAction::triggered, this, &MainWindow::openFile);
+    connect(ui->actionExit, &QAction::triggered, this, &MainWindow::Exit);
+    connect(ui->actionInv, &QAction::triggered, this, &MainWindow::Inv);
+    connect(ui->actionLine_Split, &QAction::triggered, this, &MainWindow::LineSplit);
+    connect(ui->actionLine_Split_Detailed, &QAction::triggered, this, &MainWindow::LineSplitDetailed);
+    connect(ui->actionWord_Split, &QAction::triggered, this, &MainWindow::WordSplit);
+    connect(ui->actionWord_Split_Detailed, &QAction::triggered, this, &MainWindow::WordSplitDetailed);
+    connect(ui->actionLines_Batch, &QAction::triggered, this, &MainWindow::LinesBatch);
+    connect(ui->actionWords_Batch, &QAction::triggered, this, &MainWindow::WordsBatch);
+    connect(ui->actionHorizontal_Rlsa, &QAction::triggered, this, &MainWindow::HorizontalRlsa);
+
+    //connect(ui->actionBinarization, &QAction::triggered, this, &MainWindow::W);
+}
+
+MainWindow::~MainWindow()
+{
+    delete ui;
+}
+
+
+
+void MainWindow::openFile()
+{
+  //QMessageBox msg; msg.setText("OK"); msg.exec();
+
+    QFile *f = new (std::nothrow) QFile(QFileDialog::getOpenFileName(this, tr("Open File"),QCoreApplication::applicationDirPath(),tr("Images (*.png *.tif *.jpg *.bmp)")));
+//    QFile *f = new (std::nothrow) QFile("C:\\Users\\kostas\\Documents\\Ergasia Alkis Kotsas\\images_test\\103.tif");
+
+
+    if(f->exists())
+    {
+       // QMessageBox msg; msg.setText(f->fileName()); msg.exec();
+        Image1 =  new (std::nothrow) QImage(f->fileName());
+        output = f->fileName().toStdString() + ".dat";
+
+
+        scene = new QGraphicsScene;
+        scene->addPixmap(QPixmap::fromImage(*Image1));
+        ui->graphicsView->setScene(scene);
+
+        //ui->label->setPixmap(QPixmap::fromImage(*Image1,Qt::AutoColor));
+
+        Ix = Image1->width();
+        Iy = Image1->height();
+        bpp = Image1->depth();
+
+        QString information = "BPP: "+QString::number(bpp)+"\nWidth: "+QString::number(Ix)+"\nHeight: "+QString::number(Iy);
+
+        ui->label->setText(information);
+
+
+    }
+}
+
+
+void MainWindow::Inv()
+{
+    for(uint y=0;y<Iy;y++)
+    {
+        for(uint x=0;x<Ix;x++)
+        {
+            QRgb value;
+            unsigned char u = (unsigned char) qGray(Image1->pixel(x,y));
+            value = qRgb(255-u,255-u,255-u);
+            Image1->setPixel(x,y,value);
+        }
+    }
+
+    scene = new QGraphicsScene;
+    scene->addPixmap(QPixmap::fromImage(*Image1));
+    ui->graphicsView_2->setScene(scene);
+}
+
+void MainWindow::SimpleThreshold()
+{
+    int thr = 200;
+    for(uint y=0;y<Iy;y++)
+    {
+        for(uint x=0;x<Ix;x++)
+        {
+            QRgb value;
+            unsigned char u = (unsigned char) qGray(Image1->pixel(x,y));
+
+            if(u>thr)
+            {
+                value = qRgb(255,255,255);
+                Image1->setPixel(x,y,value);
+            }else
+            {
+                value = qRgb(0,0,0);
+                Image1->setPixel(x,y,value);
+            }
+
+        }
+    }
+
+    scene = new QGraphicsScene;
+    scene->addPixmap(QPixmap::fromImage(*Image1));
+    ui->graphicsView_2->setScene(scene);
+}
+
+void MainWindow::LineSplit() {
+    for(int i=110; i<=110; i++){
+        horizontalHist(to_string(i));
+     }
+
+    return;
+    cout << Ix << endl;
+    cout << Iy << endl;
+    /** Initialize all starting values to 0 **/
+        int *values = new int[Ix*Iy];
+        for(uint i = 0; i < Ix*Iy; i++) {
+            values[i] = 0;
+        }
+
+        int *horizontal_histogram;
+        float y_valley_threshold = 0.9;
+
+        if ((horizontal_histogram = new int[Iy]) == NULL ) {
+            cerr << "Error in y histogram allocation" << endl;
+            exit(-1);
+        }
+
+        for(uint y = 0; y < Iy; y++) {
+            horizontal_histogram[y] = 0;
+
+            for(uint x = 0; x < Ix; x++) {
+                unsigned char u = (unsigned char) qGray(Image1->pixel(x,y));
+                if(u == 0) {
+                    horizontal_histogram[y] += 1;
+                }
+            }
+        }
+
+        float line_width_threshold = 9.0;
+        for(uint y = 0; y < Iy; y++) {
+            float line_pixel_threshold = (float)((line_width_threshold*Ix)/100.0);
+            horizontal_histogram[y] = horizontal_histogram[y] >= line_pixel_threshold;
+        }
+
+        vector<uint> horizontal_cuts;
+
+        uint y = 0;
+        while (y < Iy) {
+            while (y < Iy && horizontal_histogram[y] != 0) {
+                y++;
+            }
+            uint black_valley = y;
+
+            while (y < Iy && horizontal_histogram[y] == 0) {
+                y++;
+            }
+            int white_valley = y;
+
+            uint midean = black_valley + (white_valley - black_valley)/2;
+            if (white_valley - black_valley >= (float)y_valley_threshold*Ix/100.0) {
+                horizontal_cuts.push_back(midean);
+            }
+        }
+
+        delete[] horizontal_histogram;
+        if(horizontal_cuts.size() < 2) {
+            cerr << "Not enough horizontal cuts" << endl;
+            return;
+        }
+        else {
+            cout << "Horizontal cuts size: " << horizontal_cuts.size() << endl;
+        }
+
+        QImage *Image2 = new QImage(Ix,Iy,QImage::Format_RGB32);
+        for (uint x = 0; x < Ix; x++) {
+            for (uint y = 0; y < Iy; y++) {
+                unsigned char u = (unsigned char) qGray(Image1->pixel(x,y));
+                if(u == 0) {
+                    QRgb value = qRgb(0, 0, 0);
+                    Image2->setPixelColor(x,y,value);
+                }
+                else {
+                    QRgb value = qRgb(255,255,255);
+                    Image2->setPixelColor(x,y,value);
+                }
+            }
+        }
+
+        int value = 0;
+        QRgb red = qRgb(255,0,0);
+        QRgb green = qRgb(0,255,0);
+        QRgb blue = qRgb(0,0,255);
+        QRgb brown = qRgb(255, 255, 0);
+        QRgb greenblue = qRgb(0, 255, 255);
+        QRgb purple = qRgb(255, 0, 255);
+
+        QRgb colours[] = {red, blue, green, brown, greenblue, purple};
+
+        for(uint i = 0; i < horizontal_cuts.size() - 1; i++) {
+            for(uint y = horizontal_cuts[i]; y < horizontal_cuts[i+1]; y++) {
+                for(uint x = 0; x < Ix; x++) {
+                    unsigned char u = (unsigned char) qGray(Image1->pixel(x,y));
+                    if(u == 0) {
+                        values[y*Ix+x] = value;
+                        int index = value % 6;
+                        Image2->setPixelColor(x,y,colours[index]);
+                    }
+                }
+            }
+            value++;
+        }
+
+        FILE *fp = fopen(output.c_str(), "wb+");
+        for(uint y = 0; y < Iy; y++) {
+            for(uint x = 0; x < Ix; x++) {
+                fwrite(&values[y*Ix+x], 1, sizeof(int), fp);
+            }
+        }
+        fclose(fp);
+        delete[] values;
+        scene = new QGraphicsScene;
+        scene->addPixmap(QPixmap::fromImage(*Image2));
+        ui->graphicsView_2->setScene(scene);
+}
+
+
+void MainWindow::LineSplitDetailed() {
+    cout << Ix << endl;
+    cout << Iy << endl;
+    /** Initialize all starting values to 0 **/
+    int *values = new int[Ix*Iy];
+    for(uint i = 0; i < Ix*Iy; i++) {
+        values[i] = 0;
+    }
+
+    int *horizontal_histogram;
+    float y_valley_threshold = 0.7;
+
+        if ((horizontal_histogram = new int[Iy]) == NULL ) {
+            cerr << "Error in y histogram allocation" << endl;
+            exit(-1);
+        }
+
+        for(uint y = 0; y < Iy; y++) {
+            horizontal_histogram[y] = 0;
+
+            for(uint x = 0; x < Ix; x++) {
+                unsigned char u = (unsigned char) qGray(Image1->pixel(x,y));
+                if(u == 0) {
+                    horizontal_histogram[y] += 1;
+                }
+            }
+        }
+
+        float line_width_threshold = 8.0;
+        float line_pixel_threshold = (float)((line_width_threshold*Ix)/100.0);
+        for(uint y = 0; y < Iy; y++) {   
+            horizontal_histogram[y] = horizontal_histogram[y] >= line_pixel_threshold;
+        }
+
+        QImage *Image2 = new QImage(Ix,Iy,QImage::Format_RGB32);
+
+        QRgb red = qRgb(255,0,0);
+        QRgb green = qRgb(0,255,0);
+        QRgb blue = qRgb(0,0,255);
+        QRgb brown = qRgb(255, 255, 0);
+        QRgb greenblue = qRgb(0, 255, 255);
+        QRgb purple = qRgb(255, 0, 255);
+        QRgb colours[] = {red, blue, green, brown, greenblue, purple};
+
+        for (uint x = 0; x < Ix; x++) {
+            for (uint y = 0; y < Iy; y++) {
+                unsigned char u = (unsigned char) qGray(Image1->pixel(x,y));
+                if(u == 0) {
+                    QRgb value = qRgb(0, 0, 0);
+                    Image2->setPixelColor(x,y,value);
+                }
+                else {
+                    QRgb value = qRgb(255,255,255);
+                    Image2->setPixelColor(x,y,value);
+                }
+            }
+        }
+
+        for(uint i = 0; i < Iy; i++) {
+            if(horizontal_histogram[i] > 0)
+                for(int j = 0; j < 50; j++)
+                    Image2->setPixelColor(j,i,blue);
+        }
+
+        vector<uint> horizontal_cuts;
+
+        uint y = 0;
+        while (y < Iy) {
+            while (y < Iy && horizontal_histogram[y] != 0) {
+                y++;
+            }
+            uint black_valley = y;
+            while (y < Iy && horizontal_histogram[y] == 0) {
+                y++;
+            }
+            uint white_valley = y;
+            uint midean = black_valley + (white_valley - black_valley)/2;
+            if (white_valley - black_valley >= (float)y_valley_threshold*Ix/100.0) {
+                horizontal_cuts.push_back(midean);
+            }
+        }
+
+        delete[] horizontal_histogram;
+        if(horizontal_cuts.size() < 2) {
+            cerr << "Not enough horizontal cuts" << endl;
+            return;
+        }
+        else {
+            cout << "Horizontal cuts size: " << horizontal_cuts.size() << endl;
+        }
+
+        int value = 0;
+
+        for(uint i = 0; i < horizontal_cuts.size() - 1; i++) {
+            for(uint y = horizontal_cuts[i]; y < horizontal_cuts[i+1]; y++) {
+                for(uint x = 0; x < Ix; x++) {
+                    unsigned char u = (unsigned char) qGray(Image1->pixel(x,y));
+                    if(u == 0) {
+                        values[y*Ix+x] = value;
+                        int index = value % 6;
+                        Image2->setPixelColor(x,y,colours[index]);
+                    }
+                }
+            }
+            value++;
+        }
+
+        FILE *fp = fopen(output.c_str(), "wb+");
+        for(uint y = 0; y < Iy; y++) {
+            for(uint x = 0; x < Ix; x++) {
+                fwrite(&values[y*Ix+x], 1, sizeof(int), fp);
+            }
+        }
+        fclose(fp);
+        delete[] values;
+        scene = new QGraphicsScene;
+        scene->addPixmap(QPixmap::fromImage(*Image2));
+        ui->graphicsView_2->setScene(scene);
+}
+
+
+void detectWords(string imgName)
+{
+    Mat large = imread(string("imgIn\\"+imgName));
+        Mat rgb;
+        // downsample and use it for processing
+        pyrDown(large, rgb);
+        Mat small;
+        cvtColor(rgb, small, CV_BGR2GRAY);
+        // morphological gradient
+        Mat grad;
+        Mat morphKernel = getStructuringElement(MORPH_ELLIPSE, Size(3, 3));
+        morphologyEx(small, grad, MORPH_GRADIENT, morphKernel);
+        // binarize
+        Mat bw;
+        threshold(grad, bw, 0.0, 255.0, THRESH_BINARY | THRESH_OTSU);
+        // connect horizontally oriented regions
+        Mat connected;
+        morphKernel = getStructuringElement(MORPH_RECT, Size(9, 1));
+        //morphologyEx(bw, connected, MORPH_CLOSE, morphKernel);
+        connected = bw;
+        // find contours
+        Mat mask = Mat::zeros(bw.size(), CV_8UC1);
+        vector<vector<Point>> contours;
+        vector<Vec4i> hierarchy;
+        findContours(connected, contours, hierarchy, CV_RETR_CCOMP, CV_CHAIN_APPROX_SIMPLE, Point(0, 0));
+        // filter contours
+        for(int idx = 0; idx >= 0; idx = hierarchy[idx][0])
+        {
+            Rect rect = boundingRect(contours[idx]);
+            Mat maskROI(mask, rect);
+            maskROI = Scalar(0, 0, 0);
+            // fill the contour
+            drawContours(mask, contours, idx, Scalar(255, 255, 255), CV_FILLED);
+            // ratio of non-zero pixels in the filled region
+            double r = (double)countNonZero(maskROI)/(rect.width*rect.height);
+
+            if (r > .1 /* assume at least 45% of the area is filled if it contains text */
+                &&
+                (rect.height > 5 && rect.width > 9) /* constraints on region size */
+                /* these two conditions alone are not very robust. better to use something
+                like the number of significant peaks in a horizontal projection as a third condition */
+                )
+            {
+                rectangle(rgb, rect, Scalar(0, 255, 0), 2);
+            }
+        }
+        imwrite(string("imgOut3\\"+imgName), rgb);
+}
+
+void MainWindow::WordSplit() {
+    //SplitLineToWords();
+    //return;
+    // Read the image
+///////////////////////////////////////////////////////////
+for(int i=110; i<=130; i++){
+    detectWords(to_string(i) + ".tif");
+ }
+   return;
+///////////////////////////////////////////////////////////////////
+    String imageName("test.jpg"); // by default
+     src = imread( imageName, IMREAD_COLOR );
+
+    if( src.empty() )
+      { help();
+        return;
+      }
+
+    /// Pass the image to gray
+    cvtColor( src, src_gray, COLOR_RGB2GRAY );
+
+    /// Apply Canny edge detector
+    Canny( src_gray, edges, 50, 200, 3 );
+
+    /// Create Trackbars for Thresholds
+    char thresh_label[100];
+    sprintf( thresh_label, "Thres: %d + input", min_threshold );
+
+    namedWindow( standard_name, WINDOW_AUTOSIZE );
+    createTrackbar( thresh_label, standard_name, &s_trackbar, max_trackbar, Standard_Hough);
+
+    //namedWindow( probabilistic_name, WINDOW_AUTOSIZE );
+    //createTrackbar( thresh_label, probabilistic_name, &p_trackbar, max_trackbar, Probabilistic_Hough);
+
+    /// Initialize
+    Standard_Hough(0, 0);
+   // Probabilistic_Hough(0, 0);
+
+    return;
+ }
+
+ /**
+  * @function help
+  * @brief Indications of how to run this program and why is it for
+  */
+ void help()
+ {
+   printf("\t Hough Transform to detect lines \n ");
+   printf("\t---------------------------------\n ");
+   printf(" Usage: ./HoughLines_Demo <image_name> \n");
+ }
+
+ /**
+  * @function Standard_Hough
+  */
+ void Standard_Hough( int, void* )
+ {
+   vector<Vec2f> s_lines;
+   cvtColor( edges, standard_hough, COLOR_GRAY2BGR );
+
+   /// 1. Use Standard Hough Transform
+   HoughLines( edges, s_lines, 1, CV_PI/180, min_threshold + s_trackbar, 0, 0 );
+
+   /// Show the result
+   for( size_t i = 0; i < s_lines.size(); i++ )
+      {
+       float r = s_lines[i][0], t = s_lines[i][1];
+       double cos_t = cos(t), sin_t = sin(t);
+       double x0 = r*cos_t, y0 = r*sin_t;
+       double alpha = 1000;
+
+        Point pt1( cvRound(x0 + alpha*(-sin_t)), cvRound(y0 + alpha*cos_t) );
+        Point pt2( cvRound(x0 - alpha*(-sin_t)), cvRound(y0 - alpha*cos_t) );
+        line( standard_hough, pt1, pt2, Scalar(255,0,0), 3, LINE_AA);
+      }
+
+    imshow( standard_name, standard_hough );
+
+}
+
+ /**
+  * @function Probabilistic_Hough
+  */
+ void Probabilistic_Hough( int, void* )
+ {
+   vector<Vec4i> p_lines;
+   cvtColor( edges, probabilistic_hough, COLOR_GRAY2BGR );
+
+   /// 2. Use Probabilistic Hough Transform
+   HoughLinesP( edges, p_lines, 1, CV_PI/180, min_threshold + p_trackbar, 30, 10 );
+
+   /// Show the result
+   for( size_t i = 0; i < p_lines.size(); i++ )
+      {
+        Vec4i l = p_lines[i];
+        line( probabilistic_hough, Point(l[0], l[1]), Point(l[2], l[3]), Scalar(255,0,0), 3, LINE_AA);
+      }
+
+    imshow( probabilistic_name, probabilistic_hough );
+ }
+
+void MainWindow::WordSplitDetailed() {
+    /** Initialize all starting values to 0 **/
+        int *values = new int[Ix*Iy];
+        for(unsigned int i = 0; i < Ix*Iy; i++) {
+            values[i] = 0;
+        }
+
+        int *horizontal_histogram;
+        int y_valley_threshold = 0.9;
+        if ((horizontal_histogram = new int[Iy]) == NULL ) {
+            cerr << "Error in y histogram allocation" << endl;
+            exit(-1);
+        }
+
+        for(unsigned int y = 0; y < Iy; y++) {
+            horizontal_histogram[y] = 0;
+
+            for(unsigned int x = 0; x < Ix; x++) {
+
+                unsigned char u = (unsigned char) qGray(Image1->pixel(x,y));
+                if(u == 0) {
+                    horizontal_histogram[y] += 1;
+                }
+            }
+        }
+        int line_width_threshold = 8.0;
+        for(unsigned int y = 0; y < Iy; y++) {
+            float line_pixel_threshold = (float)((line_width_threshold*Ix)/100.0);
+            horizontal_histogram[y] = (horizontal_histogram[y] >= line_pixel_threshold);
+        }
+
+        QImage *Image2 = new QImage(Ix,Iy,QImage::Format_RGB32);
+
+        QRgb red = qRgb(255,0,0);
+        QRgb green = qRgb(0,255,0);
+        QRgb blue = qRgb(0,0,255);
+        QRgb brown = qRgb(255, 255, 0);
+        QRgb greenblue = qRgb(0, 255, 255);
+        QRgb purple = qRgb(255, 0, 255);
+
+        QRgb colours[] = {red, blue, green, brown, greenblue, purple};
+
+        for (uint x = 0; x < Ix; x++) {
+            for (uint y = 0; y < Iy; y++) {
+                unsigned char u = (unsigned char) qGray(Image1->pixel(x,y));
+                if(u == 0) {
+                    QRgb value = qRgb(0, 0, 0);
+                    Image2->setPixelColor(x,y,value);
+                }
+                else {
+                    QRgb value = qRgb(255,255,255);
+                    Image2->setPixelColor(x,y,value);
+                }
+            }
+        }
+
+        for(uint i = 0; i < Iy; i++) {
+            if(horizontal_histogram[i] > 0)
+                for(int j = 0; j < 50; j++)
+                    Image2->setPixelColor(j,i,blue);
+        }
+
+        vector<int> horizontal_cuts;
+
+        unsigned int y = 0;
+        while (y < Iy) {
+            while (y < Iy && horizontal_histogram[y] != 0) {
+                y++;
+            }
+            int black_valley = y;
+
+            while (y < Iy && horizontal_histogram[y] == 0) {
+                y++;
+            }
+            int white_valley = y;
+
+            int midean = black_valley + (white_valley - black_valley)/2;
+            if (white_valley - black_valley >= (float)y_valley_threshold*Iy/100.0) {
+                horizontal_cuts.push_back(midean);
+            }
+        }
+
+        delete[] horizontal_histogram;
+        if(horizontal_cuts.size() < 2) {
+            return;
+        }
+
+        for(int i = 0; i < horizontal_cuts.size() - 1; i++) {
+           //SplitLineToWordsDetailed(horizontal_cuts[i], horizontal_cuts[i+1], colours, values);
+        }
+
+        FILE *fp = fopen(output.c_str(), "wb+");
+        for(uint y = 0; y < Iy; y++) {
+            for(uint x = 0; x < Ix; x++) {
+                fwrite(&values[y*Ix+x], 1, sizeof(int), fp);
+            }
+        }
+        fclose(fp);
+        delete[] values;
+        scene = new QGraphicsScene;
+        scene->addPixmap(QPixmap::fromImage(*Image2));
+        ui->graphicsView_2->setScene(scene);
+}
+
+
+void MainWindow::SplitLineToWords()
+{cout << Ix << endl;
+    cout << Iy << endl;
+    /** Initialize all starting values to 0 **/
+        int *values = new int[Ix*Iy];
+        for(uint i = 0; i < Ix*Iy; i++) {
+            values[i] = 0;
+        }
+
+        int *vertical_histogram;
+        float x_valley_threshold = 0.9;
+
+        if ((vertical_histogram = new int[Ix]) == NULL ) {
+            cerr << "Error in y histogram allocation" << endl;
+            exit(-1);
+        }
+
+        for(uint x = 0; x < Ix; x++) {
+            vertical_histogram[x] = 0;
+
+            for(uint y = 0; y < Iy; y++) {
+                unsigned char u = (unsigned char) qGray(Image1->pixel(x,y));
+                if(u == 0) {
+                    vertical_histogram[x] += 1;
+                }
+            }
+        }
+
+        float line_width_threshold = 10.0;
+        for(uint x = 0; x < Ix; x++) {
+            float line_pixel_threshold = (float)((line_width_threshold*Iy)/100.0);
+            vertical_histogram[x] = vertical_histogram[x] >= line_pixel_threshold;
+        }
+
+        vector<uint> vertical_cuts;
+
+        uint x = 0;
+        while (x < Ix) {
+            while (x < Ix && vertical_histogram[x] != 0) {
+                x++;
+            }
+            uint black_valley = x;
+
+            while (x < Ix && vertical_histogram[x] == 0) {
+                x++;
+            }
+            int white_valley = x;
+
+            uint midean = black_valley + (white_valley - black_valley)/2;
+            if (white_valley - black_valley >= (float)x_valley_threshold*Iy/100.0) {
+                vertical_cuts.push_back(midean);
+            }
+        }
+
+        delete[] vertical_histogram;
+        if(vertical_cuts.size() < 2) {
+            cerr << "Not enough horizontal cuts" << endl;
+            return;
+        }
+        else {
+            cout << "Horizontal cuts size: " << vertical_cuts.size() << endl;
+        }
+
+        QImage *Image2 = new QImage(Ix,Iy,QImage::Format_RGB32);
+        for (uint y = 0; y < Iy; y++) {
+            for (uint x = 0; x < Ix; x++) {
+                unsigned char u = (unsigned char) qGray(Image1->pixel(x,y));
+                if(u == 0) {
+                    QRgb value = qRgb(0, 0, 0);
+                    Image2->setPixelColor(x,y,value);
+                }
+                else {
+                    QRgb value = qRgb(255,255,255);
+                    Image2->setPixelColor(x,y,value);
+                }
+            }
+        }
+
+        int value = 0;
+        QRgb red = qRgb(255,0,0);
+        QRgb green = qRgb(0,255,0);
+        QRgb blue = qRgb(0,0,255);
+        QRgb brown = qRgb(255, 255, 0);
+        QRgb greenblue = qRgb(0, 255, 255);
+        QRgb purple = qRgb(255, 0, 255);
+
+        QRgb colours[] = {red, blue, green, brown, greenblue, purple};
+
+        for(uint i = 0; i < vertical_cuts.size() - 1; i++) {
+            for(uint x = vertical_cuts[i]; x < vertical_cuts[i+1]; x++) {
+                for(uint y = 0; y < Iy; y++) {
+                    unsigned char u = (unsigned char) qGray(Image1->pixel(x,y));
+                    if(u == 0) {
+                        values[x*Iy+y] = value;
+                        int index = value % 6;
+
+                    Image2->setPixelColor(x,y,colours[index]);
+                    }
+                }
+            }
+            value++;
+        }
+
+        scene = new QGraphicsScene;
+        scene->addPixmap(QPixmap::fromImage(*Image2));
+        ui->graphicsView_2->setScene(scene);
+        
+}
+
+
+void MainWindow::WordsBatch() {
+
+}
+
+void MainWindow::LinesBatch() {
+
+}
+
+void MainWindow::Weszka()
+{
+
+}
+
+void MainWindow::CleanMemory()
+{
+
+}
+
+void MainWindow::Exit()
+{
+    CleanMemory();
+    QCoreApplication::exit(0);
+}
+
+void MainWindow::on_pushButton_clicked()
+{
+    ui->graphicsView->scale(0.9,0.9);
+    ui->graphicsView_2->scale(0.9,0.9);
+}
+
+void MainWindow::on_pushButton_2_clicked()
+{
+    ui->graphicsView->scale(1.1,1.1);
+    ui->graphicsView_2->scale(1.1,1.1);
+}
+
+void MainWindow::on_pushButton_3_clicked()
+{
+    ui->graphicsView->resetMatrix();
+    ui->graphicsView_2->resetMatrix();
+}
+
+void MainWindow::on_pushButton_4_clicked()
+{
+    ui->graphicsView->fitInView(scene->sceneRect(),Qt::KeepAspectRatio);
+    ui->graphicsView_2->fitInView(scene->sceneRect(),Qt::KeepAspectRatio);
+}
+
+
+void MainWindow::horizontalHist(string fname){
+
+    Mat img = imread(string("imgInHrlsa\\"+fname+".jpg"));
+    Mat gray;
+    cvtColor(img, gray, CV_BGR2GRAY);
+
+    cv::Mat out;
+    gray.copyTo(out);
+
+//    imshow("iiinnnn", gray);
+
+    uchar threshhold = 127;
+    int blacksThreshold = 0;
+    std::vector<int> blacksVec(gray.rows, 0);
+    for (int x = 0; x<gray.rows; x++) {
+       int blacks = 0;
+       for (int y = 0; y<gray.cols/4; y++) {
+           out.at<uchar>(x, y) = 254;
+           // black pixel
+           if (gray.at<uchar>(x, y) < threshhold) {
+               blacks++;
+           }
+       }
+        blacksVec[x]=blacks;
+   }
+    std::vector<int> smoothedblacksVec(gray.rows, 0);
+    for(int i=2; i<blacksVec.size()-2; ++i )
+    {
+        smoothedblacksVec[i]=(blacksVec[i-2]+blacksVec[i-1]+blacksVec[i]+blacksVec[i+1]+blacksVec[i+2])/5;
+    }
+
+    for (int x = 0; x<out.rows; x++) {
+    //create histogram
+        if (smoothedblacksVec[x] > blacksThreshold) {
+            for (int y = 0; y<smoothedblacksVec[x]; y++) {
+                out.at<uchar>(x, y) = 0;
+            }
+        }
+    }
+    vector<float> svec(smoothedblacksVec.size());
+    for(int x=0; x< smoothedblacksVec.size(); x++)
+    {
+        //svec[x] = (float)smoothedblacksVec[x];
+        svec[x] = (float)blacksVec[x];
+    }
+    vector<int> peaks;
+    findPeaks(svec,peaks);
+
+    //find average - median peaks gap
+    vector<int> spaces(peaks.size()-1);
+    for(int x=1; x< smoothedblacksVec.size(); x++)
+    {
+       spaces[x] = peaks[x] - peaks[x-1];
+    }
+    sort(spaces.begin(),spaces.end());
+    int median = spaces[spaces.size()/2];
+
+    std::vector<int>::iterator iter = peaks.begin()+1;
+    while (iter != peaks.end())
+    {
+        if(*iter - (*(iter-1))<(median - median/3))
+        {
+            // erase returns the new iterator
+            iter = peaks.erase(iter);
+        }
+        else
+        {
+            ++iter;
+        }
+    }
+
+//    for (int i=1; i<peaks.size(); i++)
+//    {
+//        if(peaks[i]-peaks[i-1]<(median - median/3))
+//            peaks[i] = 0;
+//    }
+
+    for(int i=0; i<peaks.size(); i++)
+    {
+        for (int x = 0; x<out.cols; x++) {
+            out.at<uchar>(peaks[i],x ) = 100;
+        }
+    }
+
+   //imwrite(string("lines2\\"+fname+".jpg"),out);
+   imshow("histogram",out);
+
+
+}
+
+void MainWindow::horRlsa(string fname)
+{
+    int thr = 100;
+
+    Mat img = imread(string("imgIn\\"+fname + ".tif"));
+    Iy = img.rows;
+    Ix = img.cols;
+
+    Mat grey;
+    cvtColor(img, grey, CV_BGR2GRAY);
+
+//imshow("Alooo",img);
+    //unsigned char **bitmap_rlsa = new (std::nothrow) unsigned char *[Iy];
+
+//    for(int y=0;y<Iy;y++)
+//    {
+//        //result of hor rlsa
+//      //  bitmap_rlsa[y] = new (std::nothrow) unsigned char [Ix];
+
+
+//        for(int x=0;x<Ix;x++)
+//        {
+//           if((unsigned char)qGray(Im->pixel(x,y)) > thr)
+//           {//white-background pixel
+//               ImageGray->setPixel(x,y,255);
+//           }else
+//           {//black-foreground pixel
+//               ImageGray->setPixel(x,y,0);
+//          }
+//        }
+//    }//end for y
+//ImageGray->save("outme.jpg");
+    //horizontal rlsa
+     //Mat tmp = grey;
+     //Mat morphKernel = getStructuringElement(MORPH_ELLIPSE, Size(3, 3));
+     //morphologyEx(tmp, grey, MORPH_GRADIENT, morphKernel);
+
+    //morphologyEx(grey, grey, MORPH_CLOSE, morphKernel);
+//    imshow ("sssss", grey);
+
+    int T = 70;
+    for(int y=0;y<Iy;y++)
+    {
+        int last_black_pos=-1;  //last black pixel position
+        for(int x=0;x<Ix;x++)
+        {
+
+            if((int)grey.at<uchar>(y,x) > thr) // white pixel
+                continue;
+
+            //found black pixel
+            if(last_black_pos==-1)
+            {
+                last_black_pos = x;
+            }
+
+            int apostash = x-last_black_pos;
+            if(apostash>1)
+            {
+                int sum_white = apostash - 1;
+                if(sum_white<=T) //paint it black!
+                {
+                    for(int xx=(last_black_pos+1); xx<=(x-1);xx++)
+                    {
+                       grey.at<uchar>(y,xx) = (uchar)0;
+//                        ImageGray->setPixel(xx,y,0);
+                    }
+                }
+
+            }
+
+            last_black_pos = x;
+        }
+    }
+  //  imshow("aaaa",grey);
+    imwrite(string("imgInHrlsa\\"+fname+".jpg"),grey);
+
+}
+
+void MainWindow::HorizontalRlsa()
+{
+    for(int i=101; i<=300; i++){
+        horRlsa(to_string(i));
+     }
+    return;
+    /////////////////////////////////////////////////
+    int thr = 100;
+
+    unsigned char **bitmap_rlsa = new (std::nothrow) unsigned char *[Iy];
+
+    for(int y=0;y<Iy;y++)
+    {
+        //result of hor rlsa
+        bitmap_rlsa[y] = new (std::nothrow) unsigned char [Ix];
+
+
+        for(int x=0;x<Ix;x++)
+        {
+           if((unsigned char)qGray(Image1->pixel(x,y)) > thr)
+           {//white-background pixel
+               bitmap_rlsa[y][x] = 0;
+           }else
+           {//black-foreground pixel
+               bitmap_rlsa[y][x] = 1;
+
+
+           }
+        }
+    }//end for y
+
+
+    //horizontal rlsa
+    int T = 30;
+    for(int y=0;y<Iy;y++)
+    {
+        int last_black_pos=-1;  //last black pixel position
+        for(int x=0;x<Ix;x++)
+        {
+            if((unsigned char)qGray(Image1->pixel(x,y)) > thr) // white pixel
+                continue;
+
+            //found black pixel
+            if(last_black_pos==-1)
+            {
+                last_black_pos = x;
+            }
+
+            int apostash = x-last_black_pos;
+            if(apostash>1)
+            {
+                int sum_white = apostash - 1;
+                if(sum_white<=T) //paint it black!
+                {
+                    for(int xx=(last_black_pos+1); xx<=(x-1);xx++)
+                    {
+                        bitmap_rlsa[y][xx] = 1;
+                    }
+                }
+
+            }
+
+            last_black_pos = x;
+
+        }
+    }
+
+    //visualize
+    QImage *Image2 = new (std::nothrow) QImage(Ix, Iy, QImage::Format_RGB888);
+    for(int y=0;y<Iy;y++)
+    {
+        for(int x=0;x<Ix;x++)
+        {
+            if(bitmap_rlsa[y][x] == 1)
+            {//black
+              Image2->setPixel(x, y, qRgb((int)0, (int)0, (int)0));
+
+            }else
+            {//white
+              Image2->setPixel(x, y, qRgb((int)255, (int)255, (int)255));
+            }
+
+
+        }
+    }
+
+
+    if(bitmap_rlsa != NULL)
+    {
+        for(int y=0; y<Iy; y++)
+        {
+            delete bitmap_rlsa[y];
+        }
+        delete bitmap_rlsa;
+        bitmap_rlsa = NULL;
+    }
+
+
+     cv::Mat inMat=cv::Mat( Image2->height(), Image2->width(),
+                    CV_8UC3,
+                    const_cast<uchar*>(Image2->bits()),
+                    static_cast<size_t>(Image2->bytesPerLine())
+                            ).clone();
+
+     int erosion_elem = 0;
+     int erosion_size = 3;
+
+     int erosion_type;
+      if( erosion_elem == 0 ){ erosion_type = cv::MORPH_RECT; }
+      else if( erosion_elem == 1 ){ erosion_type = cv::MORPH_CROSS; }
+      else if( erosion_elem == 2) { erosion_type = cv::MORPH_ELLIPSE; }
+
+     cv::Mat element = getStructuringElement( erosion_type,
+                           cv::Size( 2*erosion_size + 1, 2*erosion_size+1 ),
+                           cv::Point( erosion_size, erosion_size ) );
+
+    //cv::imshow( "before", inMat );
+
+    //cv::erode(inMat, inMat, element);
+    //cv::dilate(inMat, inMat, element);
+    //cv::imshow( "after", inMat );
+
+    QImage *Image3 = new (std::nothrow)QImage( inMat.data,
+                               inMat.cols, inMat.rows,
+                               static_cast<int>(inMat.step),
+                               QImage::Format_RGB888 );
+
+    scene = new QGraphicsScene;
+    scene->addPixmap(QPixmap::fromImage(*Image3));
+    ui->graphicsView_2->setScene(scene);
+}
+
+
+///////////////////////////////////////////////////////////
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <cmath>
+
+#define EPS 2.2204e-16
+// Util.cpp
+//#include "Util.h"
+
+
+void diff(vector<float> in, vector<float>& out)
+{
+    out = vector<float>(in.size()-1);
+
+    for(int i=1; i<in.size(); ++i)
+        out[i-1] = in[i] - in[i-1];
+}
+
+void vectorProduct(vector<float> a, vector<float> b, vector<float>& out)
+{
+    out = vector<float>(a.size());
+
+    for(int i=0; i<a.size(); ++i)
+        out[i] = a[i] * b[i];
+}
+
+void findIndicesLessThan(vector<float> in, float threshold, vector<int>& indices)
+{
+    for(int i=0; i<in.size(); ++i)
+        if(in[i]<threshold)
+            indices.push_back(i+1);
+}
+
+void selectElements(vector<float> in, vector<int> indices, vector<float>& out)
+{
+    for(int i=0; i<indices.size(); ++i)
+        out.push_back(in[indices[i]]);
+}
+
+void selectElements(vector<int> in, vector<int> indices, vector<int>& out)
+{
+    for(int i=0; i<indices.size(); ++i)
+        out.push_back(in[indices[i]]);
+}
+
+void signVector(vector<float> in, vector<int>& out)
+{
+    out = vector<int>(in.size());
+
+    for(int i=0; i<in.size(); ++i)
+    {
+        if(in[i]>0)
+            out[i]=1;
+        else if(in[i]<0)
+            out[i]=-1;
+        else
+            out[i]=0;
+    }
+}
+
+
+void findPeaks(vector<float> x0, vector<int>& peakInds)
+{
+    int minIdx = distance(x0.begin(), min_element(x0.begin(), x0.end()));
+    int maxIdx = distance(x0.begin(), max_element(x0.begin(), x0.end()));
+
+    float sel = (x0[maxIdx]-x0[minIdx])/4.0;
+
+    int len0 = x0.size();
+
+    vector<float> dx;
+    diff(x0, dx);
+    replace(dx.begin(), dx.end(), 0.0, -EPS);
+    vector<float> dx0(dx.begin(), dx.end()-1);
+    vector<float> dx1(dx.begin()+1, dx.end());
+    vector<float> dx2;
+
+    vectorProduct(dx0, dx1, dx2);
+
+    vector<int> ind;
+    findIndicesLessThan(dx2, 0, ind); // Find where the derivative changes sign
+
+    vector<float> x;
+
+    vector<int> indAux(ind.begin(), ind.end());
+    selectElements(x0, indAux, x);
+    x.insert(x.begin(), x0[0]);
+    x.insert(x.end(), x0[x0.size()-1]);;
+
+
+    ind.insert(ind.begin(), 0);
+    ind.insert(ind.end(), len0);
+
+    int minMagIdx = distance(x.begin(), min_element(x.begin(), x.end()));
+    float minMag = x[minMagIdx];
+    float leftMin = minMag;
+    int len = x.size();
+
+    if(len>2)
+    {
+        float tempMag = minMag;
+        bool foundPeak = false;
+        int ii;
+
+        // Deal with first point a little differently since tacked it on
+        // Calculate the sign of the derivative since we tacked the first
+        //  point on it does not neccessarily alternate like the rest.
+        vector<float> xSub0(x.begin(), x.begin()+3);//tener cuidado subvector
+        vector<float> xDiff;//tener cuidado subvector
+        diff(xSub0, xDiff);
+
+        vector<int> signDx;
+        signVector(xDiff, signDx);
+
+        if (signDx[0] <= 0) // The first point is larger or equal to the second
+        {
+            if (signDx[0] == signDx[1]) // Want alternating signs
+            {
+                x.erase(x.begin()+1);
+                ind.erase(ind.begin()+1);
+                len = len-1;
+            }
+        }
+        else // First point is smaller than the second
+        {
+            if (signDx[0] == signDx[1]) // Want alternating signs
+            {
+                x.erase(x.begin());
+                ind.erase(ind.begin());
+                len = len-1;
+            }
+        }
+
+        if ( x[0] >= x[1] )
+            ii = 0;
+        else
+            ii = 1;
+
+        float maxPeaks = ceil((float)len/2.0);
+        vector<int> peakLoc(maxPeaks,0);
+        vector<float> peakMag(maxPeaks,0.0);
+        int cInd = 1;
+        int tempLoc;
+
+        while(ii < len)
+        {
+            ii = ii+1;//This is a peak
+            //Reset peak finding if we had a peak and the next peak is bigger
+            //than the last or the left min was small enough to reset.
+            if(foundPeak)
+            {
+                tempMag = minMag;
+                foundPeak = false;
+            }
+
+            //Found new peak that was lager than temp mag and selectivity larger
+            //than the minimum to its left.
+
+            if( x[ii-1] > tempMag && x[ii-1] > leftMin + sel )
+            {
+                tempLoc = ii-1;
+                tempMag = x[ii-1];
+            }
+
+            //Make sure we don't iterate past the length of our vector
+            if(ii == len)
+                break; //We assign the last point differently out of the loop
+
+            ii = ii+1; // Move onto the valley
+
+            //Come down at least sel from peak
+            if(!foundPeak && tempMag > sel + x[ii-1])
+            {
+                foundPeak = true; //We have found a peak
+                leftMin = x[ii-1];
+                peakLoc[cInd-1] = tempLoc; // Add peak to index
+                peakMag[cInd-1] = tempMag;
+                cInd = cInd+1;
+            }
+            else if(x[ii-1] < leftMin) // New left minima
+                leftMin = x[ii-1];
+
+        }
+
+        // Check end point
+        if ( x[x.size()-1] > tempMag && x[x.size()-1] > leftMin + sel )
+        {
+            peakLoc[cInd-1] = len-1;
+            peakMag[cInd-1] = x[x.size()-1];
+            cInd = cInd + 1;
+        }
+        else if( !foundPeak && tempMag > minMag )// Check if we still need to add the last point
+        {
+            peakLoc[cInd-1] = tempLoc;
+            peakMag[cInd-1] = tempMag;
+            cInd = cInd + 1;
+        }
+
+        //Create output
+        if( cInd > 0 )
+        {
+            vector<int> peakLocTmp(peakLoc.begin(), peakLoc.begin()+cInd-1);
+            selectElements(ind, peakLocTmp, peakInds);
+            //peakMags = vector<float>(peakLoc.begin(), peakLoc.begin()+cInd-1);
+        }
+
+
+
+    }
+
+
+}
+
+///////////////////////////////////////////////////////////
+
+
+
