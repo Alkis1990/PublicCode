@@ -169,7 +169,7 @@ void MainWindow::LineSplit() {
         //draw line point
         line(image1, Point(0, linesIndex[i]), Point(image1.cols, linesIndex[i]), Scalar(0, 255, 0),4);
     }
-
+imshow("asda",tagImage);
     convertMatToQimage(image1, Image2);
     SetImageToView(Image2, eView::second);
 
@@ -182,9 +182,14 @@ void MainWindow::LineSplit() {
     }
     fpath += datFilename;
     FILE *fp = fopen(fpath.c_str(),"wb+");  //Copying the Image to filename.dat file
+    uchar ch[4];
+    ch[0] = '\0';
+    ch[1] = '\0';
+    ch[2] = '\0';
+    ch[3] = '\0';
     for(int r=0; r<tagImage.rows; ++r)
         for(int c=0; c<tagImage.cols; ++c){
-            uchar ch = tagImage.at<uchar>(r,c);
+            ch[0] = tagImage.at<uchar>(r,c);
             fwrite(&ch, sizeof(int), 1, fp);
         }
 
@@ -267,7 +272,7 @@ qDebug("comment2");
 qDebug("comment3");
     convertMatToQimage(wordsImage, Image2);
     qDebug("comment3.1");
-   // SetImageToView(Image2, eView::second);
+   SetImageToView(Image2, eView::second);
 qDebug("comment4");
     string fpath(openedFileInfo.absolutePath().toStdString() +"/dat_words/");
     qDebug("comment5");
