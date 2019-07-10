@@ -53,6 +53,7 @@ MainWindow::MainWindow(QWidget *parent) :
     Iy=0;
     Ix=0;
     bpp=0;
+    bBatchActive = false;
 
     scene1 = new QGraphicsScene;
     ui->graphicsView->setScene(scene1);
@@ -92,6 +93,21 @@ void MainWindow::BatchProcess()
     //select directory to process contents
     QDir directory = QFileDialog::getExistingDirectory(this, tr("select directory"));
     QStringList imageList = directory.entryList(QStringList() << "*.tif" << "*.TIF" << "*.jpg" << "*.JPG" ,QDir::Files);
+    bBatchActive = true;
+    QString information = "Batch Prossess active for Directory: " + directory.absolutePath();
+    ui->label->setText(information);
+    foreach(QString imageFile, imageList) {
+        //open file
+        openFileHelper(imageFile);
+        //find lines
+        LineSplit();
+        //find words
+        WordSplit();
+
+    }
+    bBatchActive = false;
+    information = "Batch Prossess for Directory: " + directory.absolutePath() + " is Finished";
+    ui->label->setText(information);
 }
 
 
@@ -110,10 +126,10 @@ void MainWindow::SetImageToView(QImage *pImg, eView view)
     }
 }
 
-void MainWindow::openFile()
+void MainWindow::openFileHelper(QString const &filePath)
 {
-
-    QFile *f = new (std::nothrow) QFile(QFileDialog::getOpenFileName(this, tr("Open File"),QCoreApplication::applicationDirPath(),tr("Images (*.png *.tif *.jpg *.bmp)")));
+    QFile *f;
+    f = new (std::nothrow) QFile(filePath);
 
     if(f->exists())
     {
@@ -122,15 +138,25 @@ void MainWindow::openFile()
         openedFileInfo = QFileInfo(*f);
         datFilename = openedFileInfo.fileName().toStdString() + ".dat";
 
-        SetImageToView(Image1, eView::first);
-
         Ix = Image1->width();
         Iy = Image1->height();
-        bpp = Image1->depth();       
+        bpp = Image1->depth();
 
-        QString information = "BPP: "+QString::number(bpp)+"\nWidth: "+QString::number(Ix)+"\nHeight: "+QString::number(Iy);
-        ui->label->setText(information);
+        if (!bBatchActive) //when batch process we do not need to visualize images, information or results
+        {
+            SetImageToView(Image1, eView::first);
+
+            QString information = "BPP: "+QString::number(bpp)+"\nWidth: "+QString::number(Ix)+"\nHeight: "+QString::number(Iy);
+            ui->label->setText(information);
+        }
     }
+}
+
+void MainWindow::openFile()
+{
+    bBatchActive = false;
+    QString flPath = QFileDialog::getOpenFileName(this, tr("Open File"),QCoreApplication::applicationDirPath(),tr("Images (*.png *.tif *.jpg *.bmp)"));
+    openFileHelper(flPath);
 }
 
 
@@ -169,9 +195,12 @@ void MainWindow::LineSplit() {
         //draw line point
         line(image1, Point(0, linesIndex[i]), Point(image1.cols, linesIndex[i]), Scalar(0, 255, 0),4);
     }
-imshow("asda",tagImage);
-    convertMatToQimage(image1, Image2);
-    SetImageToView(Image2, eView::second);
+
+    if(!bBatchActive) //show output if Batch is inactive
+    {
+        convertMatToQimage(image1, Image2);
+        SetImageToView(Image2, eView::second);
+    }
 
     //store file
     string fpath(openedFileInfo.absolutePath().toStdString() +"/dat_lines/");
@@ -183,10 +212,7 @@ imshow("asda",tagImage);
     fpath += datFilename;
     FILE *fp = fopen(fpath.c_str(),"wb+");  //Copying the Image to filename.dat file
     uchar ch[4];
-    ch[0] = '\0';
-    ch[1] = '\0';
-    ch[2] = '\0';
-    ch[3] = '\0';
+    memset(ch,0,4);
     for(int r=0; r<tagImage.rows; ++r)
         for(int c=0; c<tagImage.cols; ++c){
             ch[0] = tagImage.at<uchar>(r,c);
@@ -260,41 +286,33 @@ void detectWords(Mat &imgIn, Mat &imgOut, Mat &bitmapOfTag)
 
 void MainWindow::WordSplit()
 {
-qDebug("comment");
     if(!CheckImageIsLoaded()) { return; }
-qDebug("comment1");
+
     ConvertQImageToRGB888();
-qDebug("comment2");
     Mat image1;
     convertQImageToMat(Image2, image1);
     Mat wordsImage, tagImage;
     detectWords(image1, wordsImage, tagImage);
-qDebug("comment3");
-    convertMatToQimage(wordsImage, Image2);
-    qDebug("comment3.1");
-   SetImageToView(Image2, eView::second);
-qDebug("comment4");
+    if(!bBatchActive) //show output if Batch is inactive
+    {
+        convertMatToQimage(wordsImage, Image2);
+        SetImageToView(Image2, eView::second);
+    }
     string fpath(openedFileInfo.absolutePath().toStdString() +"/dat_words/");
-    qDebug("comment5");
     QDir dir(QString(fpath.c_str()));
-    qDebug("comment6");
-    //QDebug(fpath.c_str());
     if(!dir.exists())
     {
-        qDebug("comment7");
         openedFileInfo.absoluteDir().mkdir("dat_words");
     }
-    qDebug("comment8");
     fpath += datFilename;
-    qDebug("comment9");
     FILE *fp = fopen(fpath.c_str(),"wb+");  //Copying the Image to filename.dat file
-qDebug("comment10");
+    uchar ch[4];
+    memset(ch,0,4);
     for(int r=0; r<tagImage.rows; ++r)
         for(int c=0; c<tagImage.cols; ++c){
-            uchar ch = tagImage.at<uchar>(r,c);
+            ch[0] = tagImage.at<uchar>(r,c);
             fwrite(&ch, sizeof(int), 1, fp);
         }
-qDebug("comment11");
     fclose(fp);
 
 }

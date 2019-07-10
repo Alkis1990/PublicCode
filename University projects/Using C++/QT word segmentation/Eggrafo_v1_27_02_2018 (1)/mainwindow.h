@@ -37,6 +37,7 @@ private:
     Ui::MainWindow *ui;
 
     void openFile();
+    void openFileHelper(QString const &filePath);
     void Exit();
 
     uint Iy;
@@ -50,25 +51,16 @@ private:
 
     string datFilename;
     QFileInfo openedFileInfo;
+    bool bBatchActive;
 
     void Inv();
-//    void SimpleThreshold();
-//    void Binarization();
     void LineSplit();
-//    void LineSplitDetailed();
     void WordSplit();
-//    void WordSplitDetailed();
-//    void LinesBatch();
-//    void WordsBatch();
-//    void SplitLineToWordsDetailed();
-//    void SplitLineToWords();
     void HorizontalRlsa();
     void BatchProcess();
 
 
     void SetImageToView(QImage *pImg, eView view);
-//    void horRlsa(string fname);
-  //  void HorizontalHist(string fname);
     bool CheckImageIsLoaded();
     void ConvertQImageToRGB888();
 };
